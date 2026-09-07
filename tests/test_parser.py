@@ -4,6 +4,7 @@ Compatible with standard unittest and pytest.
 """
 
 import unittest
+
 from c4002.constants import MotionDirection, TargetState
 from c4002.sensor import C4002Sensor, CalibrationStatus, TelemetryData
 

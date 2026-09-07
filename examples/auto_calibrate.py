@@ -7,6 +7,7 @@ curtains, fans) and sets dynamic noise thresholds to eliminate false presence.
 """
 
 import time
+
 from c4002 import C4002Sensor
 
 

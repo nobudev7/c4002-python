@@ -12,7 +12,7 @@ import logging
 import struct
 import time
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 try:
     import serial
@@ -20,7 +20,7 @@ except ImportError:
     serial = None  # type: ignore
 
 try:
-    import RPi.GPIO as GPIO
+    from RPi import GPIO
     HAS_GPIO = True
 except (ImportError, RuntimeError):
     HAS_GPIO = False
@@ -78,7 +78,7 @@ class C4002Sensor:
         self,
         port: str = "/dev/serial0",
         baudrate: int = 115200,
-        out_pin: Optional[int] = None,
+        out_pin: int | None = None,
         timeout: float = 1.0,
     ) -> None:
         """
@@ -131,7 +131,7 @@ class C4002Sensor:
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.close()
 
-    def read_out_pin(self) -> Optional[bool]:
+    def read_out_pin(self) -> bool | None:
         """
         Read the digital OUT pin if configured.
         :return: True if HIGH (presence detected), False if LOW (clear), or None if unconfigured.
@@ -152,7 +152,7 @@ class C4002Sensor:
         return calc == recv
 
     @classmethod
-    def parse_packet(cls, packet: bytes) -> Optional[TelemetryData | CalibrationStatus]:
+    def parse_packet(cls, packet: bytes) -> TelemetryData | CalibrationStatus | None:
         """
         Parse a raw binary frame without requiring an open serial port.
 
@@ -221,7 +221,7 @@ class C4002Sensor:
 
         return None
 
-    def read_packet(self) -> Optional[TelemetryData | CalibrationStatus]:
+    def read_packet(self) -> TelemetryData | CalibrationStatus | None:
         """
         Synchronously synchronize to the next frame header and read the full packet.
         :return: TelemetryData, CalibrationStatus, or None on timeout.

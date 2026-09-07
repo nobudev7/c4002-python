@@ -4,6 +4,7 @@ Basic live monitoring example for DFRobot C4002 mmWave sensor.
 """
 
 import time
+
 from c4002 import C4002Sensor, TargetState
 
 
