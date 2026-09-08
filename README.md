@@ -11,7 +11,7 @@ Provides robust UART packet framing, real-time telemetry decoding (static presen
 ---
 
 > [!IMPORTANT]
-> **Disclaimer**: This is an independent, community-developed open-source library. It is not affiliated with, maintained by, or endorsed by DFRobot. All product names, logos, and brands are property of their respective owners.
+> **Disclaimer**: This is an independent open-source library. It is not affiliated with, maintained by, or endorsed by DFRobot. All product names, logos, and brands are property of their respective owners.
 
 ---
 
@@ -26,7 +26,7 @@ Provides robust UART packet framing, real-time telemetry decoding (static presen
   * **Gate Bitmasks & Hold Timers**: Reports active distance gates and presence disappearance countdown.
 * **Auto Environmental Calibration**: Built-in routine to sample room reflections and store the background noise floor, preventing false triggers.
 * **Reliable Checksum Verification**: Validates 16-bit packet checksums to reject corrupted data.
-* **Hardware Agnostic**: Tested on Raspberry Pi Zero W / Pi 4 / Pi 5, but works with any standard USB-to-UART TTL serial converter on Linux, macOS, or Windows.
+* **Hardware Agnostic**: Tested on Raspberry Pi Zero W, but works with any Raspberry Pi and standard USB-to-UART TTL serial converter on Linux, macOS, or Windows.
 * **Optional GPIO Monitoring**: Support for the module's digital OUT pin via `RPi.GPIO` (falls back gracefully if GPIO is unavailable).
 
 ---
