@@ -141,6 +141,23 @@ python3 examples/auto_calibrate.py
 
 ---
 
+## 1-Minute Time-Series Logging (Aggregation)
+
+To log presence data into a CSV file for charting without missing transient movements (e.g., someone walking through the room for 10 seconds):
+
+```bash
+python3 examples/minute_aggregator.py --output presence_1min_timeseries.csv
+```
+
+* Samples sensor telemetry continuously at 1 Hz and aggregates into 1-minute rows.
+* Generates metrics ideal for charting:
+  * `occupancy_pct`: Occupancy percentage (`0.0% – 100.0%`) during the minute.
+  * `avg_distance_m`: Mean presence distance (calculated only when presence is active).
+  * `max_motion_energy`: Peak movement energy (`0 – 100`) recorded in that window.
+  * `avg_light_lux`: Mean ambient light level.
+
+---
+
 ## Telemetry Data Reference
 
 `sensor.read_packet()` returns a `TelemetryData` object with the following attributes:
