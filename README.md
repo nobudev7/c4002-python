@@ -74,7 +74,19 @@ The primary serial port will be accessible at `/dev/serial0`.
 
 ## Installation
 
-### From Source (Local Development)
+### Direct Install via pip (No git clone required)
+
+Install directly into your Python environment from GitHub:
+
+```bash
+# Standard installation
+pip install git+https://github.com/nobudev7/c4002-python.git
+
+# With optional Raspberry Pi GPIO support
+pip install "c4002-python[gpio] @ git+https://github.com/nobudev7/c4002-python.git"
+```
+
+### From Source (For Local Development)
 
 ```bash
 git clone https://github.com/nobudev7/c4002-python.git
