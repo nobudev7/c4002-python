@@ -28,6 +28,7 @@ except (ImportError, RuntimeError):
 from c4002.constants import (
     CMD_ENV_CALIBRATION,
     CMD_SET_DETECT_RANGE,
+    CMD_SET_LED_MODE,
     CMD_SET_REPORT_PERIOD,
     CMD_SET_TARGET_DISAPPEAR_DELAY,
     FRAME_HEADER_BYTES,
@@ -35,9 +36,11 @@ from c4002.constants import (
     FRAME_TYPE_WRITE_REQUEST,
     NOTE_CALIBRATION_CMD,
     NOTE_RESULT_CMD,
+    LedMode,
     MotionDirection,
     TargetState,
 )
+
 
 logger = logging.getLogger(__name__)
 
@@ -315,6 +318,49 @@ class C4002Sensor:
             delay_s & 0xFF, (delay_s >> 8) & 0xFF
         ]
         self._send_frame(data, 6, FRAME_TYPE_WRITE_REQUEST)
+
+    def set_led(
+        self,
+        run_led: int | bool = LedMode.OFF,
+        out_led: int | bool = LedMode.OFF,
+    ) -> None:
+        """
+        Configure the onboard RUN (operation) and OUT (detection) LEDs.
+
+        :param run_led: LedMode.OFF (or False), LedMode.ON (or True), or LedMode.KEEP
+        :param out_led: LedMode.OFF (or False), LedMode.ON (or True), or LedMode.KEEP
+        """
+        run_val = int(run_led) if isinstance(run_led, bool) else int(run_led)
+        out_val = int(out_led) if isinstance(out_led, bool) else int(out_led)
+        data = [
+            CMD_SET_LED_MODE,
+            0x00,  # Read/Write request
+            0x06, 0x00,  # Data length = 6
+            run_val & 0xFF,
+            out_val & 0xFF,
+        ]
+        self._send_frame(data, 6, FRAME_TYPE_WRITE_REQUEST)
+
+    def set_run_led(self, state: int | bool) -> None:
+        """
+        Configure the onboard blue RUN (operation/power) LED.
+
+        :param state: LedMode.OFF (False) or LedMode.ON (True)
+        """
+        self.set_led(run_led=state, out_led=LedMode.KEEP)
+
+    def set_out_led(self, state: int | bool) -> None:
+        """
+        Configure the onboard OUT (detection indicator) LED.
+
+        :param state: LedMode.OFF (False) or LedMode.ON (True)
+        """
+        self.set_led(run_led=LedMode.KEEP, out_led=state)
+
+    def turn_off_leds(self) -> None:
+        """Convenience method to turn off both onboard LEDs (stealth/dark mode)."""
+        self.set_led(run_led=LedMode.OFF, out_led=LedMode.OFF)
+
 
     def _send_frame(self, data: list[int], data_len: int, msg_type: int) -> None:
         """Internal helper to construct and transmit a validated command frame."""

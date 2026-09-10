@@ -137,7 +137,42 @@ with C4002Sensor(port="/dev/serial0") as sensor:
 
 ---
 
+## Onboard LED Control (Dark / Stealth Mode)
+
+The C4002 module includes two onboard LEDs:
+* **Blue RUN LED**: Operation / power indicator (blinks or stays solid blue).
+* **OUT LED**: Detection indicator (lights up when presence/motion is detected).
+
+You can control or completely disable both LEDs via software over UART:
+
+```python
+from c4002 import C4002Sensor, LedMode
+
+with C4002Sensor(port="/dev/serial0") as sensor:
+    # Turn off both LEDs (stealth/bedroom mode)
+    sensor.turn_off_leds()
+
+    # Or control each LED individually:
+    sensor.set_run_led(False)       # Turn off blue RUN LED
+    sensor.set_out_led(False)       # Turn off detection OUT LED
+    sensor.set_run_led(True)        # Turn blue RUN LED back on
+    sensor.set_led(run_led=LedMode.OFF, out_led=LedMode.OFF)
+```
+
+In the example scripts, pass the `--led-off` flag:
+
+```bash
+python3 examples/basic_monitor.py --led-off
+python3 examples/minute_aggregator.py --led-off
+```
+
+> [!NOTE]
+> Like sensor detection thresholds, the LED state is stored in volatile memory on the radar module. When the sensor is power-cycled (power disconnected or Raspberry Pi rebooted), the module reverts to its hardware default (RUN LED ON). Call `turn_off_leds()` on startup in your script or daemon to ensure it stays dark.
+
+---
+
 ## Environmental Background Noise Calibration
+
 
 Because 24GHz radar waves detect micro-movements, reflective objects (metal furniture, fans, moving curtains) can cause false presence triggers in an empty room. 
 

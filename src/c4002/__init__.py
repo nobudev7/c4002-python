@@ -6,15 +6,28 @@ This is an independent, community-developed open-source library.
 It is not affiliated with, maintained by, or endorsed by DFRobot.
 """
 
-from c4002.constants import MotionDirection, ResolutionMode, TargetState
+from c4002.constants import (
+    LED_KEEP,
+    LED_OFF,
+    LED_ON,
+    LedMode,
+    MotionDirection,
+    ResolutionMode,
+    TargetState,
+)
 from c4002.sensor import C4002Sensor, CalibrationStatus, TelemetryData
 
 __version__ = "0.1.0"
 __all__ = [
     "C4002Sensor",
     "CalibrationStatus",
+    "LED_KEEP",
+    "LED_OFF",
+    "LED_ON",
+    "LedMode",
     "MotionDirection",
     "ResolutionMode",
     "TargetState",
     "TelemetryData",
 ]
+

@@ -83,3 +83,17 @@ class ResolutionMode(IntEnum):
     """Distance gate resolution mode."""
     RESOLUTION_80CM = 0x00  # Up to 15 gates, max 11.6m
     RESOLUTION_20CM = 0x01  # Up to 25 gates, max 4.9m
+
+
+class LedMode(IntEnum):
+    """LED operating mode for C4002 onboard LEDs."""
+    OFF = 0x00
+    ON = 0x01
+    KEEP = 0xFF
+
+
+# Convenience aliases
+LED_OFF = LedMode.OFF
+LED_ON = LedMode.ON
+LED_KEEP = LedMode.KEEP
+

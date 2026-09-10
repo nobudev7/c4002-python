@@ -37,6 +37,11 @@ def main() -> None:
         default=60,
         help="Aggregation window in seconds (default: 60)",
     )
+    parser.add_argument(
+        "--led-off",
+        action="store_true",
+        help="Turn off onboard blue RUN and detection LEDs (dark/stealth mode)",
+    )
     args = parser.parse_args()
 
     csv_path = Path(args.output)
@@ -53,6 +58,8 @@ def main() -> None:
     print(f"  • Serial Port       : {args.port}")
     print(f"  • Aggregation Window: {args.interval} seconds")
     print(f"  • CSV Output File   : {csv_path.resolve()}")
+    if args.led_off:
+        print("  • Stealth Mode      : LEDs OFF")
     print("Press Ctrl+C to stop.\n")
 
     sensor = C4002Sensor(port=args.port, baudrate=115200)
@@ -60,9 +67,14 @@ def main() -> None:
     try:
         sensor.connect()
 
+        if args.led_off:
+            sensor.turn_off_leds()
+            time.sleep(0.05)
+
         # Set sensor hardware reporting interval to 1.0s (10 * 100ms)
         sensor.set_report_period(10)
         time.sleep(0.1)
+
 
         # Flush any stale packets that were buffered before starting
         if sensor.ser and hasattr(sensor.ser, "reset_input_buffer"):

@@ -3,23 +3,51 @@
 Basic live monitoring example for DFRobot C4002 mmWave sensor.
 """
 
+import argparse
 import time
 
 from c4002 import C4002Sensor, TargetState
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="DFRobot C4002 mmWave Sensor — Live Monitor"
+    )
+    parser.add_argument(
+        "--port",
+        default="/dev/serial0",
+        help="Serial port path (default: /dev/serial0)",
+    )
+    parser.add_argument(
+        "--out-pin",
+        type=int,
+        default=17,
+        help="BCM GPIO pin connected to OUT (default: 17, pass -1 to disable)",
+    )
+    parser.add_argument(
+        "--led-off",
+        action="store_true",
+        help="Turn off onboard blue RUN and detection LEDs (dark/stealth mode)",
+    )
+    args = parser.parse_args()
+
     print("==================================================")
     print("  DFRobot C4002 mmWave Sensor — Live Monitor      ")
     print("==================================================")
 
-    # Initialize sensor on Raspberry Pi default serial port (/dev/serial0)
-    # and optional OUT pin connected to GPIO 17
-    sensor = C4002Sensor(port="/dev/serial0", baudrate=115200, out_pin=17)
+    out_pin = None if args.out_pin < 0 else args.out_pin
+    sensor = C4002Sensor(port=args.port, baudrate=115200, out_pin=out_pin)
 
     try:
         sensor.connect()
-        print("Connected to C4002. Press Ctrl+C to stop.\n")
+        print("Connected to C4002.")
+
+        if args.led_off:
+            sensor.turn_off_leds()
+            print("Onboard LEDs turned OFF.")
+
+        print("Press Ctrl+C to stop.\n")
+
 
         while True:
             # 1. Read optional digital GPIO OUT pin
