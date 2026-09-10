@@ -19,11 +19,11 @@ from c4002.sensor import C4002Sensor, CalibrationStatus, TelemetryData
 
 __version__ = "0.2.0"
 __all__ = [
-    "C4002Sensor",
-    "CalibrationStatus",
     "LED_KEEP",
     "LED_OFF",
     "LED_ON",
+    "C4002Sensor",
+    "CalibrationStatus",
     "LedMode",
     "MotionDirection",
     "ResolutionMode",

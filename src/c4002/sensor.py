@@ -41,7 +41,6 @@ from c4002.constants import (
     TargetState,
 )
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -330,8 +329,8 @@ class C4002Sensor:
         :param run_led: LedMode.OFF (or False), LedMode.ON (or True), or LedMode.KEEP
         :param out_led: LedMode.OFF (or False), LedMode.ON (or True), or LedMode.KEEP
         """
-        run_val = int(run_led) if isinstance(run_led, bool) else int(run_led)
-        out_val = int(out_led) if isinstance(out_led, bool) else int(out_led)
+        run_val = int(run_led)
+        out_val = int(out_led)
         data = [
             CMD_SET_LED_MODE,
             0x00,  # Read/Write request
