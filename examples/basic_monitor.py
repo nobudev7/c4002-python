@@ -48,8 +48,6 @@ def main() -> None:
 
                 print("-" * 50)
 
-            time.sleep(0.5)
-
     except KeyboardInterrupt:
         print("\nStopping monitor...")
     finally:

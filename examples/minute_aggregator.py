@@ -62,17 +62,24 @@ def main() -> None:
 
         # Set sensor hardware reporting interval to 1.0s (10 * 100ms)
         sensor.set_report_period(10)
+        time.sleep(0.1)
+
+        # Flush any stale packets that were buffered before starting
+        if sensor.ser and hasattr(sensor.ser, "reset_input_buffer"):
+            sensor.ser.reset_input_buffer()
 
         minute_samples = []
         window_start = time.time()
 
         while True:
+            # Blocks until the next packet arrives from the sensor
             packet = sensor.read_packet()
             if packet and not getattr(packet, "is_calibrating", False):
                 minute_samples.append(packet)
 
             # Check if aggregation window has elapsed
-            elapsed = time.time() - window_start
+            now = time.time()
+            elapsed = now - window_start
             if elapsed >= args.interval:
                 if minute_samples:
                     total_samples = len(minute_samples)
@@ -98,7 +105,7 @@ def main() -> None:
                     )
 
                     # Format timestamp and CSV row
-                    timestamp_str = time.strftime("%Y-%m-%d %H:%M:00")
+                    timestamp_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(now))
                     dist_str = f"{avg_distance:.2f}" if avg_distance is not None else ""
                     csv_row = (
                         f"{timestamp_str},{occupancy_pct},{dist_str},"
@@ -120,9 +127,7 @@ def main() -> None:
 
                 # Reset window
                 minute_samples.clear()
-                window_start = time.time()
-
-            time.sleep(1.0)
+                window_start = now
 
     except KeyboardInterrupt:
         print("\nStopping aggregator logger...")
