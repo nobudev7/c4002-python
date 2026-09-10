@@ -37,10 +37,16 @@ def main() -> None:
         default=60,
         help="Aggregation window in seconds (default: 60)",
     )
-    parser.add_argument(
+    led_group = parser.add_mutually_exclusive_group()
+    led_group.add_argument(
         "--led-off",
         action="store_true",
         help="Turn off onboard blue RUN and detection LEDs (dark/stealth mode)",
+    )
+    led_group.add_argument(
+        "--led-on",
+        action="store_true",
+        help="Turn on onboard blue RUN and detection LEDs (restore default)",
     )
     args = parser.parse_args()
 
@@ -60,6 +66,8 @@ def main() -> None:
     print(f"  • CSV Output File   : {csv_path.resolve()}")
     if args.led_off:
         print("  • Stealth Mode      : LEDs OFF")
+    elif args.led_on:
+        print("  • LED Mode          : LEDs ON")
     print("Press Ctrl+C to stop.\n")
 
     sensor = C4002Sensor(port=args.port, baudrate=115200)
@@ -69,6 +77,9 @@ def main() -> None:
 
         if args.led_off:
             sensor.turn_off_leds()
+            time.sleep(0.05)
+        elif args.led_on:
+            sensor.set_led(run_led=True, out_led=True)
             time.sleep(0.05)
 
         # Set sensor hardware reporting interval to 1.0s (10 * 100ms)

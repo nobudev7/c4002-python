@@ -24,10 +24,16 @@ def main() -> None:
         default=17,
         help="BCM GPIO pin connected to OUT (default: 17, pass -1 to disable)",
     )
-    parser.add_argument(
+    led_group = parser.add_mutually_exclusive_group()
+    led_group.add_argument(
         "--led-off",
         action="store_true",
         help="Turn off onboard blue RUN and detection LEDs (dark/stealth mode)",
+    )
+    led_group.add_argument(
+        "--led-on",
+        action="store_true",
+        help="Turn on onboard blue RUN and detection LEDs (restore default)",
     )
     args = parser.parse_args()
 
@@ -45,6 +51,9 @@ def main() -> None:
         if args.led_off:
             sensor.turn_off_leds()
             print("Onboard LEDs turned OFF.")
+        elif args.led_on:
+            sensor.set_led(run_led=True, out_led=True)
+            print("Onboard LEDs turned ON.")
 
         print("Press Ctrl+C to stop.\n")
 
