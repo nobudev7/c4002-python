@@ -1,8 +1,11 @@
 # c4002-python
 
+[![PyPI version](https://img.shields.io/pypi/v/c4002-python.svg)](https://pypi.org/project/c4002-python/)
 [![Test & Lint](https://github.com/nobudev7/c4002-python/actions/workflows/test.yml/badge.svg)](https://github.com/nobudev7/c4002-python/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
+[🇺🇸 English](README.md) | [🇯🇵 日本語](README.ja.md)
 
 Python driver and CLI tools for the **DFRobot C4002 (SEN0691) 24GHz mmWave Human Presence Detection Module**.
 
@@ -74,9 +77,21 @@ The primary serial port will be accessible at `/dev/serial0`.
 
 ## Installation
 
-### Direct Install via pip (No git clone required)
+### Install via pip (Recommended)
 
-Install directly into your Python environment from GitHub:
+Install the latest release from [PyPI](https://pypi.org/project/c4002-python/):
+
+```bash
+# Standard installation
+pip install c4002-python
+
+# With optional Raspberry Pi GPIO support
+pip install "c4002-python[gpio]"
+```
+
+### Install from GitHub
+
+To install the latest development version directly from GitHub:
 
 ```bash
 # Standard installation
@@ -214,7 +229,7 @@ python3 examples/minute_aggregator.py --output presence_1min_timeseries.csv
 | `target_state` | `TargetState` | Enum (`0`, `1`, `2`) | `NO_TARGET`, `STATIC_PRESENCE`, or `MOTION` |
 | `target_state_name` | `str` | String | Human-readable state name |
 | `presence_detected` | `bool` | `True` / `False` | `True` if state is presence or motion |
-| `ambient_light_lux` | `float` | Lux (0.0 – 6553.5) | Onboard ambient light intensity |
+| `ambient_light_lux` | `float` | Lux (0.0 – 6553.5) | Onboard ambient light intensity (note: 0.0–6553.5 is the Python/protocol value range, not the sensor's physical sensitivity range of ~0–50 Lux) |
 | `presence_distance_m` | `float` | Meters | Distance to static presence target |
 | `presence_energy` | `int` | `0` – `100` | Reflected signal energy of static target |
 | `presence_countdown_s` | `int` | Seconds | Delay countdown before presence clears |
